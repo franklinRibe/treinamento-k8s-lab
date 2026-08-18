@@ -58,6 +58,7 @@ Estas ferramentas não são necessárias para executar os manifests:
 
 - [Docker Desktop](https://docs.docker.com/desktop/): alternativa integrada
   ao Docker Engine; não é pré-requisito adicional;
+- autocomplete do `kubectl`: opcional, mas recomendado para uso diário;
 - [Krew — instalação](https://krew.sigs.k8s.io/docs/user-guide/setup/install/):
   gerenciador de plugins do `kubectl`;
 - [`kubectx` e `kubens` (`ctx` e `ns`)](https://github.com/ahmetb/kubectx):
@@ -65,6 +66,23 @@ Estas ferramentas não são necessárias para executar os manifests:
 
 Não coloque chaves AWS em manifests, imagens ou repositórios. Prefira perfis,
 `AWS_PROFILE` e credenciais temporárias.
+
+Para habilitar o autocomplete do `kubectl`, instale o pacote de completion da
+sua distribuição e adicione a configuração ao shell. No Bash:
+
+```bash
+source <(kubectl completion bash)
+echo 'source <(kubectl completion bash)' >> ~/.bashrc
+```
+
+No Zsh:
+
+```zsh
+source <(kubectl completion zsh)
+echo 'source <(kubectl completion zsh)' >> ~/.zshrc
+```
+
+Reabra o terminal ou recarregue o arquivo do shell depois da configuração.
 
 Valide a instalação:
 
