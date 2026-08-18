@@ -1,0 +1,21 @@
+# Artefatos locais do laboratório
+.DS_Store
+*.log
+*.tmp
+
+# Credenciais e configurações locais
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Evidências que podem conter dados do ambiente
+evidence/
+reports/private/
+
+# Estado local de ferramentas
+.terraform/
+*.tfstate
+*.tfstate.*
+

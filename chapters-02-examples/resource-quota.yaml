@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: orion-pod-count
+  namespace: chapter-02-lab
+spec:
+  hard:
+    pods: "1"

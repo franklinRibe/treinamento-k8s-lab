@@ -1,0 +1,8 @@
+apiVersion: platform.orion.example/v1alpha1
+kind: OrionMaintenance
+metadata:
+  name: api-cache
+  namespace: chapter-02-lab
+spec:
+  action: cleanup-cache
+  target: orion-api

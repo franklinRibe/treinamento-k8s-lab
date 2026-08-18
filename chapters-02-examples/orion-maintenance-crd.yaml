@@ -1,0 +1,37 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: orionmaintenances.platform.orion.example
+spec:
+  group: platform.orion.example
+  scope: Namespaced
+  names:
+    plural: orionmaintenances
+    singular: orionmaintenance
+    kind: OrionMaintenance
+    shortNames:
+      - om
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required:
+            - spec
+          properties:
+            spec:
+              type: object
+              required:
+                - action
+                - target
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - cleanup-cache
+                    - generate-report
+                target:
+                  type: string
+                  minLength: 1

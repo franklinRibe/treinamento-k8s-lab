@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: orion-restart-demo
+  namespace: chapter-02-lab
+  labels:
+    app.kubernetes.io/name: orion-restart-demo
+    app.kubernetes.io/part-of: orion
+spec:
+  restartPolicy: OnFailure
+  containers:
+    - name: maintenance
+      image: orion-api:chapter-02
+      imagePullPolicy: IfNotPresent
+      command:
+        - python
+        - -B
+        - -c
+        - |
+          print("orion restart demo failed", flush=True)
+          raise SystemExit(17)
