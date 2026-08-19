@@ -1,0 +1,48 @@
+replicaCount: 2
+image:
+  repository: orion-api
+  tag: lab
+  pullPolicy: IfNotPresent
+service:
+  enabled: true
+  port: 80
+  targetPort: http
+services:
+  clusterIP:
+    enabled: true
+    name: orion-clusterip
+  nodePort:
+    enabled: true
+    name: orion-nodeport
+    port: 30080
+  loadBalancer:
+    enabled: false
+    name: orion-nlb
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: external
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+ingress:
+  enabled: false
+  name: orion
+  className: alb
+  host: api.orion.example
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+brokenService:
+  enabled: false
+  name: orion-broken
+config:
+  ORION_ENV: laboratorio
+secret:
+  API_TOKEN: laboratorio-descartavel
+app:
+  message: "orion-v1"
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi

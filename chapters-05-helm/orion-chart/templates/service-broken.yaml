@@ -1,0 +1,14 @@
+{{- if .Values.brokenService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.brokenService.name }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: does-not-exist
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+{{- end }}

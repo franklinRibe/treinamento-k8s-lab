@@ -1,0 +1,50 @@
+{{- if .Values.services.clusterIP.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.clusterIP.name }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: {{ include "orion.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+{{- end }}
+{{- if .Values.services.nodePort.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.nodePort.name }}
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: {{ include "orion.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      nodePort: {{ .Values.services.nodePort.port }}
+---
+{{- end }}
+{{- if .Values.services.loadBalancer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.services.loadBalancer.name }}
+  annotations:
+{{ toYaml .Values.services.loadBalancer.annotations | indent 4 }}
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: {{ include "orion.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+{{- end }}

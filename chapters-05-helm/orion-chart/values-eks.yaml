@@ -1,0 +1,5 @@
+services:
+  loadBalancer:
+    enabled: true
+ingress:
+  enabled: true
