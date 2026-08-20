@@ -1,9 +1,9 @@
 Lab Validation: PASS
 
-subject_commit: c8b0358
+subject_commit: 7bf56a6
 
 - `preflight`: PASS;
-- kind v1.35.0, validação executada sobre a candidata c8b0358;
+- kind v1.35.0, validação executada sobre a candidata 7bf56a6;
 - kind v1.35.0, imagem Orion carregada e Deployment 2/2: PASS;
 - RBAC permitido/negado e referência de Role inexistente: PASS;
 - labels de Pod Security e NetworkPolicies: PASS;
