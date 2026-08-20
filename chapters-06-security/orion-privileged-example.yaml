@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: orion-privileged-example
+  namespace: orion
+  labels:
+    app: orion-privileged-example
+spec:
+  containers:
+    - name: example
+      image: orion-api:lab
+      securityContext:
+        privileged: true
+        runAsUser: 0
+        allowPrivilegeEscalation: true
+      command: ["python", "app.py"]
