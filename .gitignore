@@ -18,4 +18,5 @@ reports/private/
 .terraform/
 *.tfstate
 *.tfstate.*
+*.terraform.lock.hcl
 
