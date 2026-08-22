@@ -1,4 +1,4 @@
-clusterName: eks-dev
+clusterName: REPLACE_WITH_EKS_CLUSTER_NAME
 region: us-east-1
 vpcId: vpc-REPLACE_DEV
 

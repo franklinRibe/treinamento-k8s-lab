@@ -35,27 +35,37 @@ para acessar esse URL. O nome do repositório não deve ser colocado no campo
 `repoURL`; esse campo precisa ser o URL Git/HTTPS ou SSH que o Argo CD consegue
 clonar.
 
-## Clusters de destino
+## Cluster atual e exemplos futuros
 
-Os exemplos assumem que os clusters foram registrados no Argo CD com estes
-nomes:
+Neste momento, os quatro ApplicationSets geram somente o ambiente `dev` no
+cluster local do Argo CD:
 
 | Ambiente | Nome do cluster no Argo CD |
 | --- | --- |
-| dev | `eks-dev` |
+| dev | `in-cluster` |
+
+Os elementos de `uat` e `prod` permanecem comentados nos ApplicationSets como
+exemplos para os alunos. Quando novos clusters forem registrados no Argo CD,
+descomente os respectivos elementos nos quatro arquivos:
+
+| Ambiente | Nome do cluster no Argo CD |
+| --- | --- |
 | uat | `eks-uat` |
 | prod | `eks-prod` |
 
-Se os nomes forem diferentes, altere o campo `cluster` nos quatro
-ApplicationSets. Os clusters também precisam estar autorizados pelo AppProject
-`default`, ou por um AppProject próprio.
+Os nomes `eks-uat` e `eks-prod` são apenas exemplos. Se forem diferentes,
+altere o campo `cluster` nos quatro ApplicationSets. Os clusters também
+precisam estar autorizados pelo AppProject `default`, ou por um AppProject
+próprio.
 
 ## Valores que precisam ser ajustados
 
 Antes de sincronizar, altere:
 
 - `vpcId` e `region` nos values do AWS Load Balancer Controller;
-- `clusterName`, se os nomes reais dos clusters forem diferentes;
+- `clusterName` no values do AWS Load Balancer Controller. Ele deve ser o nome
+  real do cluster EKS, não necessariamente o nome `in-cluster` usado pelo
+  Argo CD;
 - a `ServiceAccount` do AWS Load Balancer Controller, que deve existir em
   cada cluster e estar associada à role IAM apropriada;
 - `storageClassName` e os tamanhos de volume do Prometheus;
