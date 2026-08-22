@@ -1,0 +1,66 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-gp3
+provisioner: ebs.csi.aws.com
+
+parameters:
+  type: gp3
+  fsType: ext4
+
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-data
+  namespace: default
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  storageClassName: ebs-gp3
+
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-ebs-test
+  namespace: default
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: nginx-ebs-test
+
+  template:
+    metadata:
+      labels:
+        app: nginx-ebs-test
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+
+          ports:
+            - containerPort: 80
+
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/nginx/html
+
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: nginx-data

@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: prometheus
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - environment: dev
+            cluster: eks-dev
+          - environment: uat
+            cluster: eks-uat
+          - environment: prod
+            cluster: eks-prod
+  template:
+    metadata:
+      name: prometheus-{{environment}}
+      labels:
+        app.kubernetes.io/part-of: observability
+        app.kubernetes.io/component: prometheus
+        environment: '{{environment}}'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://prometheus-community.github.io/helm-charts
+          chart: kube-prometheus-stack
+          targetRevision: 88.0.1
+          helm:
+            releaseName: kube-prometheus-stack
+            valueFiles:
+              - $values/gitops/values/prometheus/{{environment}}.yaml
+        - repoURL: https://github.com/franklinRibe/treinamento-k8s-lab.git
+          targetRevision: main
+          ref: values
+      destination:
+        name: '{{cluster}}'
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

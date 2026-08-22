@@ -191,11 +191,12 @@ helm upgrade --install aws-load-balancer-controller \
   eks/aws-load-balancer-controller \
   --namespace kube-system \
   --set clusterName=SEU-CLUSTER \
-  --set serviceAccount.create=false \
+  --set serviceAccount.create=true \
   --set serviceAccount.name=aws-load-balancer-controller \
+  --set-string 'serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::061785603003:role/AmazonEKSLoadBalancerControllerRoleIRSA' \
   --version 1.14.0 \
-  --set region=REGIAO \
-  --set vpcId=vpc-XXXXXXXX
+  --set region=us-east-2 \
+  --set vpcId=vpc-vpc-0e1e318ae3f7057dd
 ```
 
 O ponto essencial para IRSA é a combinação entre a ServiceAccount anotada e

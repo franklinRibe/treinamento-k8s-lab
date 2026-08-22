@@ -1,0 +1,7 @@
+clusterName: eks-uat
+region: us-east-1
+vpcId: vpc-REPLACE_UAT
+
+serviceAccount:
+  create: false
+  name: aws-load-balancer-controller

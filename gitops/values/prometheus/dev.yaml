@@ -1,0 +1,22 @@
+crds:
+  enabled: true
+
+grafana:
+  enabled: true
+  admin:
+    existingSecret: grafana-admin
+
+prometheus:
+  prometheusSpec:
+    replicas: 1
+    retention: 7d
+    serviceMonitorSelectorNilUsesHelmValues: false
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp3
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 20Gi

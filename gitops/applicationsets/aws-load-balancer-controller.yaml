@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - environment: dev
+            cluster: eks-dev
+          - environment: uat
+            cluster: eks-uat
+          - environment: prod
+            cluster: eks-prod
+  template:
+    metadata:
+      name: aws-load-balancer-controller-{{environment}}
+      labels:
+        app.kubernetes.io/part-of: platform
+        app.kubernetes.io/component: aws-load-balancer-controller
+        environment: '{{environment}}'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://aws.github.io/eks-charts
+          chart: aws-load-balancer-controller
+          targetRevision: 1.14.0
+          helm:
+            releaseName: aws-load-balancer-controller
+            valueFiles:
+              - $values/gitops/values/aws-load-balancer-controller/{{environment}}.yaml
+        - repoURL: https://github.com/franklinRibe/treinamento-k8s-lab.git
+          targetRevision: main
+          ref: values
+      destination:
+        name: '{{cluster}}'
+        namespace: kube-system
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
