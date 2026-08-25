@@ -3,8 +3,6 @@ crds:
 
 grafana:
   enabled: true
-  admin:
-    existingSecret: grafana-admin
 
 prometheus:
   prometheusSpec:
