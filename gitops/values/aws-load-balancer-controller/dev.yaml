@@ -1,7 +1,7 @@
 clusterName: REPLACE_WITH_EKS_CLUSTER_NAME
 region: us-east-1
-vpcId: vpc-REPLACE_DEV
+vpcId: vpc-089bfcfcfc3281d2a
 
 serviceAccount:
-  create: false
+  create: true
   name: aws-load-balancer-controller
