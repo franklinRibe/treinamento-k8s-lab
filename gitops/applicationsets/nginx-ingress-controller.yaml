@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nginx
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - environment: dev
+            cluster: in-cluster
+          # Exemplos para clusters futuros. Descomente quando eles forem
+          # registrados no Argo CD.
+          # - environment: uat
+          #   cluster: eks-uat
+          # - environment: prod
+          #   cluster: eks-prod
+  template:
+    metadata:
+      name: nginx-{{environment}}
+      labels:
+        app.kubernetes.io/component: nginx
+        environment: '{{environment}}'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/nginx/kubernetes-ingress
+          chart: ingress-nginx 
+          targetRevision: 4.15.1
+
+          helm:
+            releaseName: ingress-nginx
+            valueFiles:
+              - $values/gitops/values/nginx/{{environment}}.yaml
+
+        - repoURL: https://github.com/franklinRibe/treinamento-k8s-lab.git
+          targetRevision: main
+          ref: values
+      destination:
+        name: '{{cluster}}'
+        namespace: nginx-ingress
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
