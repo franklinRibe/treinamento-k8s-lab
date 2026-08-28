@@ -47,10 +47,10 @@ exemplo principal.
 ### Verificação e acesso local
 
 ```bash
-kubectl -n monitoring-prometheus get pods,svc
-kubectl -n monitoring-prometheus rollout status deployment/prometheus-server --timeout=120s
+kubectl -n monitoring get pods,svc
+kubectl -n monitoring rollout status deployment/prometheus-server --timeout=120s
 
-kubectl -n monitoring-prometheus port-forward svc/prometheus-server 9090:80
+kubectl -n monitoring port-forward svc/prometheus-server 9090:80
 ```
 
 Abra <http://localhost:9090> e consulte, por exemplo, a expressão `up`. O
@@ -60,8 +60,8 @@ conhece o alvo, mas não conseguiu coletá-lo.
 ### Limpeza
 
 ```bash
-helm uninstall prometheus --namespace monitoring-prometheus
-kubectl delete namespace monitoring-prometheus --ignore-not-found
+helm uninstall prometheus --namespace monitoring
+kubectl delete namespace monitoring --ignore-not-found
 ```
 
 ## Opção 2 — chart `kube-prometheus-stack`
@@ -78,7 +78,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 
 helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
-  --namespace monitoring-stack \
+  --namespace monitoring \
   --create-namespace \
   --values kube-prometheus-stack/values.yaml
 ```
