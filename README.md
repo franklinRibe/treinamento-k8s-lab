@@ -13,6 +13,8 @@ descartados sem modificar o repositório editorial.
   limites.
 - `chapters-03-eks/`: roteiro operacional do capítulo de EKS, com baseline,
   falhas de acesso, capacidade, add-ons e cleanup.
+- `monitoring/`: duas alternativas de instalação do Prometheus com Helm:
+  chart `prometheus` e `kube-prometheus-stack`.
 
 Os três primeiros diretórios foram copiados dos exemplos executáveis do livro.
 O capítulo 03 é separado porque cria recursos AWS e exige conta, região,
@@ -161,7 +163,10 @@ logs, endereços e transferência. Confirme o cleanup e revise a conta AWS.
 ├── chapters-00-examples/
 ├── chapters-01-examples/
 ├── chapters-02-examples/
-└── chapters-03-eks/
+├── chapters-03-eks/
+│   └── reports/lab-report.md
+└── monitoring/
     ├── README.md
-    └── reports/lab-report.md
+    ├── prometheus/values.yaml
+    └── kube-prometheus-stack/values.yaml
 ```

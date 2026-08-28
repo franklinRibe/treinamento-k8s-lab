@@ -1,0 +1,125 @@
+rbac:
+  create: true
+
+serviceAccounts:
+  server:
+    create: true
+
+server:
+  name: server
+  image:
+    repository: quay.io/prometheus/prometheus
+
+  global:
+    scrape_interval: 1m
+    scrape_timeout: 10s
+    evaluation_interval: 1m
+
+  tolerations: []
+
+  nodeSelector: {}
+
+  podDisruptionBudget:
+    enabled: false
+
+  persistentVolume:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+
+    size: 8Gi
+    storageClass: "gp2"
+
+  replicaCount: 1
+
+  service:
+    enabled: true
+
+  prometheus-pushgateway:
+    enabled: true
+
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: Instances
+        rules:
+          - alert: InstanceDown
+            expr: up == 0
+            for: 5m
+            labels:
+              severity: page
+            annotations:
+              description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.'
+              summary: 'Instance {{ $labels.instance }} down'
+      
+      - name: Prometheus
+        rules:
+          - alert: PrometheusTargetMissing
+            expr: up == 0 unless on(job) (sum by (job) (up) == 0)
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus target missing (instance {{ $labels.instance }})
+              description: "A Prometheus target has disappeared. An exporter might be crashed.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          
+          - alert: PrometheusAllTargetsMissing
+            expr: sum by (job) (up) == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus all targets missing (instance {{ $labels.instance }})
+              description: "A Prometheus job does not have living target anymore.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+      - name: NodesEKS
+        rules:
+          - alert: NodeNotReady
+            expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+            for: 5m
+            labels:
+              severity: page
+            annotations:
+              description: '{{ $labels.node }} of cluster {{ $labels.cluster }} has been NotReady for more than 5 minutes.'
+              summary: 'Node {{ $labels.node }} NotReady'
+
+  alerts: {}
+
+  rules: {}
+
+  prometheus.yml:
+    rule_files:
+      - /etc/config/recording_rules.yml
+      - /etc/config/alerting_rules.yml
+      ## Below two files are DEPRECATED will be removed from this default values file
+      - /etc/config/rules
+      - /etc/config/alerts
+
+alertmanager:
+  enabled: true
+
+  persistence:
+    enabled: true
+
+    storageClass: "gp2"
+    accessModes:
+      - ReadWriteOnce
+    size: 2Gi
+
+  podSecurityContext:
+    runAsUser: 65534
+    runAsNonRoot: true
+    runAsGroup: 65534
+    fsGroup: 65534
+
+kube-state-metrics:
+  enabled: true
+
+prometheus-node-exporter:
+  enabled: true
+
+  rbac:
+    pspEnabled: false
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false

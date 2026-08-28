@@ -1,0 +1,30 @@
+# Exemplo didático do chart prometheus-community/kube-prometheus-stack.
+# Para produção, configure storageSpec com uma StorageClass apropriada.
+
+grafana:
+  enabled: true
+
+prometheus:
+  enabled: true
+  prometheusSpec:
+    replicas: 1
+    retention: 7d
+    # Permite descobrir ServiceMonitor e PrometheusRule de outros charts.
+    serviceMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
+
+alertmanager:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
+
+prometheus-node-exporter:
+  enabled: true
