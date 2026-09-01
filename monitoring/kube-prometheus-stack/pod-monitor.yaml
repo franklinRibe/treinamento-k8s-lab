@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: metrics-demo
+  namespace: orion
+  labels:
+    app.kubernetes.io/name: metrics-demo
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metrics-demo
+  podMetricsEndpoints:
+    - port: web
+      path: /metrics
+      interval: 30s
